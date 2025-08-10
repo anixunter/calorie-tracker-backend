@@ -1,9 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework import status
+from core.apps.users.serializers import UserSerializer
 
-class TestUsers(APIView):
+class RegisterView(APIView):
     permission_classes = [AllowAny]
     
-    def get(self, request):
-        return Response({"message": "Here's the User test api"})
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "message": "User created successfully",
+                "user": UserSerializer(user).data
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
