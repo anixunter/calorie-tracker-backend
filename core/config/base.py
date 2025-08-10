@@ -39,10 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'rest_framework',
+    'corsheaders',
+    'drf_spectacular',
+    
     'core.apps.users'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,6 +55,21 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# =============
+# CORS Settings
+# =============
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",   # React default
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",   # Vue/Nuxt
+]
+
+# Optional: Allow all origins in development only
+# CORS_ALLOW_ALL_ORIGINS = True  # ❌ Not recommended in production
+
+# Optional: Allow credentials (cookies, Authorization header)
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'core.urls.base'
 
@@ -73,12 +92,31 @@ WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.asgi.application'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+# ===============
+# Spectacular Settings
+# ===============
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Calorie Tracker API',
+    'DESCRIPTION': 'A REST API for tracking calories, meals, and user goals.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SORT_OPERATIONS': False,
 }
 
 #JWT
