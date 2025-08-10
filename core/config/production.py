@@ -1,8 +1,12 @@
+from decouple import config
 from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['yourdomain.com', 'api.yourapp.com']
+# Read allowed hosts from env
+import os
+allowed_hosts = config('ALLOWED_HOSTS', default='')
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
 
 # this was in canteen backend like this.
 # STATIC_URL = f'{config("STATIC_URL")}/static/'
