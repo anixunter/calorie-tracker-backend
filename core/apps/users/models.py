@@ -8,7 +8,8 @@ class User(AbstractUser):
         ('O', 'Other'),
         ('N', 'Prefer not to say'),
     ]
-    
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     weight_kg = models.FloatField(null=True, blank=True)
