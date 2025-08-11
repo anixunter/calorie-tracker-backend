@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from core.utils.models import TimeStampModelMixin, AuditModelMixin, SoftDeleteModelMixin, UserManager
 
-class User(AbstractUser):
+class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractUser):
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -34,6 +35,15 @@ class User(AbstractUser):
         ],
         default='maintain'
     )
+    is_active = models.BooleanField(default=True, db_index=True)
     
     def __str__(self):
         return self.username 
+    
+    objects = UserManager()
+    all_objects = models.Manager()
+    
+    class Meta:
+        db_table = 'auth_user'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
