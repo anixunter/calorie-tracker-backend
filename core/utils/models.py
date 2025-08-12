@@ -38,7 +38,6 @@ class SoftDeleteQuerySet(models.QuerySet):
     def delete(self, user=None):
         return super().update(
             is_deleted=True,
-            is_active=False,
             deleted_at=timezone.now(),
             deleted_by=user
         )
@@ -67,7 +66,6 @@ class SoftDeleteManager(models.Manager):
     
     def hard_delete(self):
         return self.get_queryset().hard_delete()
-
 
 
 class SoftDeleteModelMixin(models.Model):
@@ -100,11 +98,10 @@ class SoftDeleteModelMixin(models.Model):
             return
         
         self.is_deleted = True
-        self.is_active = False
         self.deleted_at = timezone.now()
         self.deleted_by = user
         #save only the fields related to soft delete
-        update_fields = ['is_deleted', 'is_active', 'deleted_at', 'deleted_by']
+        update_fields = ['is_deleted', 'deleted_at', 'deleted_by']
         self.save(update_fields=update_fields, using=using)
     
     def restore(self, user=None):
@@ -143,7 +140,6 @@ class UserManager(BaseUserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
         
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True')

@@ -3,45 +3,45 @@ from django.contrib.auth.models import AbstractUser
 from core.utils.models import TimeStampModelMixin, AuditModelMixin, SoftDeleteModelMixin, UserManager
 
 class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractUser):
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
-        ('N', 'Prefer not to say'),
-    ]
+    class Gender(models.TextChoices):
+        MALE = 'M', 'Male'
+        FEMALE = 'F', 'Female'
+        OTHER = 'O', 'Other'
+        NOT_SAY = 'N', 'Prefer not to say'
+    
+    class ActivityLevel(models.TextChoices):
+        SEDENTARY = 'sedentary', 'Sedentary'
+        LIGHT = 'light', 'Lightly Active'
+        MODERATE = 'moderate', 'Moderately Active'
+        ACTIVE = 'active', 'Very Active'
+        EXTREME = 'extreme', 'Extremely Active'
+    
+    class Goal(models.TextChoices):
+        MAINTAIN = 'maintain', 'Maintain Weight'
+        LOSE = 'lose', 'Lose Weight'
+        GAIN = 'gain', 'Gain Weight'
+    
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
+    gender = models.CharField(max_length=1, choices=Gender.choices, blank=True)
     weight_kg = models.FloatField(null=True, blank=True)
     height_cm = models.FloatField(null=True, blank=True)
     activity_level = models.CharField(
         max_length=20,
-        choices=[
-            ('sedentary', 'Sedentary'),
-            ('light', 'Lightly Active'),
-            ('moderate', 'Moderately Active'),
-            ('active', 'Very Active'),
-            ('extreme', 'Extremely Active'),
-        ],
+        choices=ActivityLevel.choices,
         blank=True
     )
     goal = models.CharField(
         max_length=20,
-        choices=[
-            ('maintain', 'Maintain Weight'),
-            ('lose', 'Lose Weight'),
-            ('gain', 'Gain Weight'),
-        ],
-        default='maintain'
+        choices=Goal.choices,
+        default=Goal.MAINTAIN
     )
-    is_active = models.BooleanField(default=True, db_index=True)
+       
+    objects = UserManager()
     
     def __str__(self):
-        return self.username 
-    
-    objects = UserManager()
-    all_objects = models.Manager()
+        return self.username
     
     class Meta:
         db_table = 'auth_user'
