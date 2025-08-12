@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     
-    'core.apps.users'
+    'core.apps.users',
+    'core.apps.calories',
 ]
 
 AUTH_USER_MODEL = 'users.User'

@@ -40,10 +40,10 @@ class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractU
        
     objects = UserManager()
     
-    def __str__(self):
-        return self.username
-    
     class Meta:
         db_table = 'auth_user'
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+    
+    def __str__(self):
+        return self.username
