@@ -30,7 +30,7 @@ class CalorieRecord(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin):
     class Meta:
         verbose_name = 'Calorie Record'
         verbose_name_plural = 'Calorie Records'
-        indexs = [models.Index(fields=['user', 'date'])]
+        indexes = [models.Index(fields=['user', 'date'])]
 
     def __str__(self):
         return f"{self.food_name}({self.calories} kcal) by {self.user.username}"

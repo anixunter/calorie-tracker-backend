@@ -90,7 +90,7 @@ class SoftDeleteModelMixin(models.Model):
     class Meta:
         abstract = True
     
-    def delete(self, using=None, keep_parents=False, user=None):
+    def delete(self, user=None):
         """
         Soft delete: mark as deleted
         """
@@ -102,7 +102,7 @@ class SoftDeleteModelMixin(models.Model):
         self.deleted_by = user
         #save only the fields related to soft delete
         update_fields = ['is_deleted', 'deleted_at', 'deleted_by']
-        self.save(update_fields=update_fields, using=using)
+        self.save(update_fields=update_fields)
     
     def restore(self, user=None):
         """
@@ -110,7 +110,7 @@ class SoftDeleteModelMixin(models.Model):
         """
         self.is_deleted = False
         self.deleted_at = None
-        self.deleted_by = None
+        self.deleted_by = user
         self.save()
         
     def hard_delete(self, *args, **kwargs):
