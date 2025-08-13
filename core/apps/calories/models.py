@@ -28,8 +28,6 @@ class CalorieRecord(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin):
     
     
     class Meta:
-        verbose_name = 'Calorie Record'
-        verbose_name_plural = 'Calorie Records'
         indexes = [models.Index(fields=['user', 'date'])]
 
     def __str__(self):

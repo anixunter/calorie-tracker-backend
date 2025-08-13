@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     
     'core.apps.users',
     'core.apps.calories',
+    'core.apps.common',
 ]
 
 AUTH_USER_MODEL = 'users.User'

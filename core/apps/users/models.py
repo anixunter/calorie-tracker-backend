@@ -2,7 +2,20 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from core.utils.models import TimeStampModelMixin, AuditModelMixin, SoftDeleteModelMixin, UserManager
 
-class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractUser):
+class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractUser): 
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+       
+    objects = UserManager()
+    
+    class Meta:
+        db_table = 'auth_user'
+    
+    def __str__(self):
+        return self.username
+
+
+class UserProfile(TimeStampModelMixin, AuditModelMixin):
     class Gender(models.TextChoices):
         MALE = 'M', 'Male'
         FEMALE = 'F', 'Female'
@@ -21,8 +34,11 @@ class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractU
         LOSE = 'lose', 'Lose Weight'
         GAIN = 'gain', 'Gain Weight'
     
-    username = models.CharField(max_length=150, unique=True)
-    email = models.EmailField(unique=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile'
+    )
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=Gender.choices, blank=True)
     weight_kg = models.FloatField(null=True, blank=True)
@@ -37,13 +53,6 @@ class User(SoftDeleteModelMixin, TimeStampModelMixin, AuditModelMixin, AbstractU
         choices=Goal.choices,
         default=Goal.MAINTAIN
     )
-       
-    objects = UserManager()
-    
-    class Meta:
-        db_table = 'auth_user'
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
     
     def __str__(self):
-        return self.username
+        return f"Profile of {self.user.username}"
