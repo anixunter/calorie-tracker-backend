@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status, generics, permissions
 from drf_spectacular.utils import extend_schema
 from core.apps.users.serializers import UserSerializer
+from core.utils.utils import activity_log
 
 @extend_schema(tags=["Users"])
 class UserSignUpView(generics.CreateAPIView):
@@ -14,6 +14,13 @@ class UserSignUpView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        
+        #log the activity after user is successfully created
+        activity_log(
+            actor=user,
+            verb='created account',
+            target='user'
+        )
         
         return Response(
             {
