@@ -60,8 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        profile_data = validated_data.pop('profile', None)
         #update profile data if provided
+        profile_data = validated_data.pop('profile', None)
         if profile_data:
             profile_serializer = self.fields['profile']
             profile_serializer.update(instance.profile, profile_data)

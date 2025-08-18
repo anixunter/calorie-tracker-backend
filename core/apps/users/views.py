@@ -56,7 +56,7 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         Custom action to retrieve or update the profile of the currently
         authenticated user.
         """
-        #in this action `self.get_object()`` will return current user
+        #or `self.get_object()` will also return current user
         instance = self.request.user
         
         if request.method == 'GET':
