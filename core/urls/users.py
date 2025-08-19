@@ -4,6 +4,6 @@ from core.apps.users.views import UserViewSet
 
 router = DefaultRouter()
 
-router.register('', UserViewSet, basename='user')
+router.register("", UserViewSet, basename="user")
 
 urlpatterns = router.urls

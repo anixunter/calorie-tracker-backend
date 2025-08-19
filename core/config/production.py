@@ -5,8 +5,9 @@ DEBUG = False
 
 # Read allowed hosts from env
 import os
-allowed_hosts = config('ALLOWED_HOSTS', default='')
-ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
+
+allowed_hosts = config("ALLOWED_HOSTS", default="")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(",") if host.strip()]
 
 # this was in canteen backend like this.
 # STATIC_URL = f'{config("STATIC_URL")}/static/'

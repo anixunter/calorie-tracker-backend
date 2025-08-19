@@ -6,13 +6,8 @@ def activity_log(actor, verb, target=None, data=None):
     """
     Helper function to create an ActivityLog entry.
     """
-    #we dont log actions from anonymous users unless explicitly needed
+    # we dont log actions from anonymous users unless explicitly needed
     if not actor or not actor.is_authenticated:
         return
-    
-    ActivityLog.objects.create(
-        actor=actor,
-        verb=verb,
-        target=target,
-        data=data
-    )
+
+    ActivityLog.objects.create(actor=actor, verb=verb, target=target, data=data)
